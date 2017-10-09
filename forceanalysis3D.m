@@ -14,6 +14,7 @@ function [barforces,reacforces]=forceanalysis3D(joints,connectivity,reacjoints,r
 %         reacforces   - reaction forces
 %
 % Author: Kurt Maute, Sept 21 2011
+% Modified: Matthew Ryan, Oct. 9, 2017
 
 % extract number of joints, bars, reactions, and loads
 numjoints = size(joints,1);
