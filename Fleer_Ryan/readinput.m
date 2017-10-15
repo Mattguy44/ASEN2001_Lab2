@@ -15,7 +15,7 @@ function [joints,connectivity,reacjoints,reacvecs,loadjoints,loadvecs]=readinput
 % Author: Kurt Maute, Sept 21 2011
 
 % open inputfile
-fid=fopen('test3d_1.inp');
+fid=fopen(inputfile);
 
 if fid<0;error('inputfile does not exist');end
 
@@ -59,7 +59,7 @@ while line > 0
             loadvecs     = zeros(numloads,3);
             
             % check whether system satisfies static determiancy condition
-            if 3*numjoints ~= 2*numbars
+            if 3*numjoints ~= numbars + numreact
                 error('truss is not statically determinate');
             end
 

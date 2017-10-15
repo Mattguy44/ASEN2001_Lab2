@@ -43,11 +43,11 @@ end
 fprintf(fid,'\n');
     
 % write connectivity and forces
-fprintf(fid,'Bars:           Bar-id    Joint-i      Joint-j      Joint-z     Force    (T,C)\n');
+fprintf(fid,'Bars:           Bar-id    Joint-1      Joint-2     Force    (T,C)\n');
 for i=1:size(connectivity,1)
     if barforces(i)>0;tc='T';else tc='C';end
-    fprintf(fid,'%17d   %7d %12d %12d    %12.3f     (%s)\n',...
-        i,connectivity(i,1),connectivity(i,2),connectivity(i,3),abs(barforces(i)),tc);
+    fprintf(fid,'%17d   %7d %12d    %12.3f     (%s)\n',...
+        i,connectivity(i,1),connectivity(i,2),abs(barforces(i)),tc);
 end
 fprintf(fid,'\n');
 
