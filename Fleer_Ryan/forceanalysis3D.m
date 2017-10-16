@@ -1,6 +1,5 @@
-function [barforces,reacforces]=forceanalysis3D(joints,connectivity,reacjoints,reacvecs,loadjoints,loadvecs)
-% function [barforces,reacforces]=forceanalysis(joints,connectivity,reacjoints,reacvecs,loadjoints,loadvecs)
-%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
 % compute forces in bars and reaction forces
 %
 % input:  joints       - coordinates of joints
@@ -13,9 +12,11 @@ function [barforces,reacforces]=forceanalysis3D(joints,connectivity,reacjoints,r
 % output: barforces    - force magnitude in bars
 %         reacforces   - reaction forces
 %
-% Author: Kurt Maute, Sept 21 2011
-% Modified: Matthew Ryan, Oct. 9, 2017
+% Pierce Costello, Braden Barkemeyer - 10/09/2017
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+function [barforces,reacforces]=forceanalysis(joints,connectivity,reacjoints,reacvecs,loadjoints,loadvecs)
+readinput('test3d_1.inp');
 % extract number of joints, bars, reactions, and loads
 numjoints = size(joints,1);
 numbars   = size(connectivity,1);
@@ -37,7 +38,6 @@ for i=1:numjoints
    idx = 3*i-2;
    idy = 3*i-1;
    idz = 3*i;
-   
    % get all bars connected to joint
    [ibar,ijt]=find(connectivity==i);
    
