@@ -11,7 +11,8 @@
 %         loadjoints   - joint id where external load acts on
 %         loadvecs     - load vector
 %
-% Pierce Costello, Bradeb Barkemey - 10/09/2017
+% Modified By: Ethan Fleer, Oct. 9, 2017
+% Modified By: Matthew Ryan,  Oct. 16, 2017
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [joints,connectivity,reacjoints,reacvecs,loadjoints,loadvecs] = readinput(inputfile)

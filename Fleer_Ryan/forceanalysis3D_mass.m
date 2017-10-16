@@ -14,7 +14,7 @@ function [barforces,reacforces]=forceanalysis3D_mass(joints,connectivity,reacjoi
 %         reacforces   - reaction forces
 %
 % Author: Kurt Maute, Sept 21 2011
-% Modified: Matthew Ryan, Oct. 9, 2017
+% Modified: Matthew Ryan, Oct. 16, 2017
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % extract number of joints, bars, and reactions
