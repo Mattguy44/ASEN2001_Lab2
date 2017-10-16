@@ -11,7 +11,7 @@
 %         loadjoints   - joint id where external load acts on
 %         loadvecs     - load vector
 %
-% Pierce Costello 10/09/2017
+% Pierce Costello, Bradeb Barkemey - 10/09/2017
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function [joints,connectivity,reacjoints,reacvecs,loadjoints,loadvecs] = readinput(inputfile)
@@ -188,9 +188,4 @@ end
 fclose(fid);
 
 end
-
-
-
-
-
 
