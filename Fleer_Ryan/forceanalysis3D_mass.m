@@ -1,14 +1,14 @@
-function [barforces,reacforces]=forceanalysis3D(joints,connectivity,reacjoints,reacvecs,loadjoints,loadvecs)
+function [barforces,reacforces]=forceanalysis3D_mass(joints,connectivity,reacjoints,reacvecs,rhobar,jointweight)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 % compute forces in bars and reaction forces
 %
-% input:  joints       - coordinates of joints
+% input:  joints       - coordinates of joints (in)
 %         connectivity - connectivity 
 %         reacjoints   - joint id where reaction acts on
-%         reacvecs     - unit vector associated with reaction force
-%         loadjoints   - joint id where external load acts on
-%         loadvecs     - load vector
+%         reacvecs     - unit vector associated with reaction force (in)
+%         rhobar       - linear density of members (lb/in)
+%         jointweight  - average weight of a joint (lb)
 %
 % output: barforces    - force magnitude in bars
 %         reacforces   - reaction forces
@@ -17,11 +17,12 @@ function [barforces,reacforces]=forceanalysis3D(joints,connectivity,reacjoints,r
 % Modified: Matthew Ryan, Oct. 9, 2017
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% extract number of joints, bars, reactions, and loads
+% extract number of joints, bars, and reactions
 numjoints = size(joints,1);
 numbars   = size(connectivity,1);
 numreact  = size(reacjoints,1);
-numloads  = size(loadjoints,1);
+
+weightvec = zeros(3*numjoints);
 
 % number of equations
 numeqns = 3 * numjoints;
@@ -58,7 +59,11 @@ for i=1:numjoints
        
        % compute unit vector pointing away from joint i
        vec_ij = joint_j - joint_i;
-       uvec   = vec_ij/norm(vec_ij);
+       vec_ij_mag = norm(vec_ij);
+       uvec   = vec_ij/vec_ij_mag;
+       
+       % add half weight of bar to joint
+       weightvec(idz) = weightvec(idz) - 0.5*vec_ij_mag*rhobar;
        
        % add unit vector into Amat
        Amat([idx idy idz],barid)=uvec;
@@ -81,18 +86,13 @@ for i=1:numreact
 end
 
 % build load vector
-for i=1:numloads
-    
-    % get joint id at which external force acts
-    jid=loadjoints(i);
+for i=1:numjoints
 
     % equation id numbers
-    idx = 3*jid-2;
-    idy = 3*jid-1;
-    idz = 3*jid;
+    idz = 3*i;
 
-    % add unit vector into bvec (sign change)
-    bvec([idx idy idz])=-loadvecs(i,:);
+    % add weight vector into bvec (sign change)
+    bvec(idz) = -weightvec(idz) + jointweight;
 end
 
 % check for invertability of Amat

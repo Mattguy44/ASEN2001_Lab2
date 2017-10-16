@@ -1,7 +1,7 @@
 # 3D truss verification problem 1
 #
-# number of joints, bar, reactions, loads
-1  2  1  1
+# number of joints, bar, reactions
+1  2  1
 #
 # coordinates of joints
 # Joint   dx   dy   dz
@@ -15,8 +15,10 @@
 # F   dx   dy   dz
 1   0.0   0.0   0.0
 #
-# external loads
-# F   dx   dy   dz
-4   0.0   0.0   0.0
+# linear density of bars (lb/in)
+0.0
+#
+# average joint weight (lb)
+0.0
 #
 # end of file

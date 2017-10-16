@@ -68,7 +68,6 @@ if dim ~= 3
 end
 
 % extract min and max force values
-
 minfrc=floor(min(eforce));
 maxfrc=ceil(max(eforce));
 

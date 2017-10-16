@@ -11,10 +11,10 @@
 %         loadjoints   - joint id where external load acts on
 %         loadvecs     - load vector
 %
-% Pierce Costello, Bradeb Barkemey - 10/09/2017
+% Matthew Ryan, Ethan Fleer - 10/16/2017
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [joints,connectivity,reacjoints,reacvecs,loadjoints,loadvecs] = readinput(inputfile)
+function [joints,connectivity,reacjoints,reacvecs,rho,m_j] = readinput_mass(inputfile)
 
 % open inputfile
 fid = fopen(inputfile);
@@ -42,14 +42,13 @@ while line > 0
     
     switch input_blk
         
-        case 1 % read number of joints, bars, reactions, and loads
+        case 1 % read number of joints, bars, and reactions
             
-            input_par = sscanf(line,'%d%d%d%d%d');
+            input_par = sscanf(line,'%d%d%d%d');
             
             numjoints = input_par(1);
             numbars   = input_par(2);
             numreact  = input_par(3);
-            numloads  = input_par(4);
             
             % check for correct number of reaction forces
             if numreact~=6; error('incorrect number of reaction forces');end
@@ -59,8 +58,6 @@ while line > 0
             connectivity = zeros(numbars,2);
             reacjoints   = zeros(numreact,1);
             reacvecs     = zeros(numreact,3);
-            loadjoints   = zeros(numloads,1);
-            loadvecs     = zeros(numloads,3);
             
             % check whether system satisfies static determiancy condition
             if 3*numjoints -6 ~= numbars
@@ -143,38 +140,25 @@ while line > 0
             reacjoints(counter)  = jointid;
             reacvecs(counter,:)  = uvec;
             
-            % expect next input block to be external loads
+            % expect next input block to be linear bar density
             if counter == numreact
                 input_blk  = 5;
                 counter = 0;
             end
             
-        case 5 % read external load information
+        case 5 % read linear bar density
             
-            % increment reaction id
-            counter = counter + 1;
+            rho = sscanf(line, '%f');
             
-            % read joint id and unit vector of reaction force;
-            tmp = sscanf(line,'%d%e%e');
+            % expect next input block to be average joint mass
+            input_blk = 6;
             
-            % extract and check joint id
-            jointid = tmp(1);
-            if jointid > numjoints || jointid < 1
-                error('joint id number need to be smaller than number of joints and larger than 0');
-            end
+        case 6 % read average joint mass
             
-            % extract force vector
-            frcvec = tmp(2:4);
+            m_j = sscanf(line, '%f');
             
-            % store joint id and unit vector
-            loadjoints(counter) = jointid;
-            loadvecs(counter,:) = frcvec;
-            
-            % expect no additional input block
-            if counter == numloads
-                input_blk  = 99;
-                counter = 0;
-            end
+            % expect no more input
+            input_blk = -1;
             
         otherwise
             %fprintf('warning: unknown input: %s\n',line);
