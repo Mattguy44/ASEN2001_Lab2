@@ -12,9 +12,10 @@
 %         loadvecs     - load vector
 %
 % Matthew Ryan, Ethan Fleer - 10/16/2017
+% Modified: Matthew Ryan, Oct. 20, 2017
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function [joints,connectivity,reacjoints,reacvecs,rho,m_j] = readinput_mass(inputfile)
+function [joints,connectivity,reacjoints,reacvecs,rho,jointweight,maxload] = readinput_mass(inputfile)
 
 % open inputfile
 fid = fopen(inputfile);
@@ -153,9 +154,11 @@ while line > 0
             % expect next input block to be average joint mass
             input_blk = 6;
             
-        case 6 % read average joint mass
+        case 6 % read average joint weight
             
-            m_j = sscanf(line, '%f');
+            m_j = sscanf(line, '%f %f');
+            jointweight = m_j(1);
+            maxload = m_j(2);
             
             % expect no more input
             input_blk = -1;

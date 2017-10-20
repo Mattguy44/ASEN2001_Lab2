@@ -1,4 +1,4 @@
-function [barforces,reacforces,jointloads]=forceanalysis3D_mass(joints,connectivity,reacjoints,reacvecs,rhobar,jointweight)
+function [barforces,reacforces,jointloads,jointfailure]=forceanalysis3D_mass(joints,connectivity,reacjoints,reacvecs,rhobar,jointweight,maxload)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 % compute forces in bars and reaction forces
@@ -22,7 +22,13 @@ numjoints = size(joints,1);
 numbars   = size(connectivity,1);
 numreact  = size(reacjoints,1);
 
-weightvec = zeros(3*numjoints);
+% allocate arrays
+weightvec = zeros(3*numjoints,1);
+%jointfailure = repmat(' ',[numjoints 1]);
+
+% define max design load
+k = 1.7;
+maxdesign = maxload/k;
 
 % number of equations
 numeqns = 3 * numjoints;
@@ -93,6 +99,19 @@ for i=1:numjoints
 
     % add weight vector into bvec (sign change)
     bvec(idz) = -weightvec(idz) + jointweight;
+    
+    % check if load on joint is too great
+    b_mag = norm([bvec(idx) bvec(idy) bvec(idz)]);
+    if b_mag > maxload
+        jointfailure(i) = string('Exceeds Maximum Load');
+    else
+        if b_mag > maxdesign
+            jointfailure(i) = string('Exceeds Allowable Load');
+        end
+    end
+    
+%     % extract loads on joints
+%     jointloads(i) = [bvec(idx) bvec(idy) bvec(idz) jointfailure(i)];
 end
 
 % check for invertability of Amat
@@ -106,6 +125,5 @@ xvec=Amat\bvec;
 % extract forces in bars and reaction forces
 barforces=xvec(1:numbars);
 reacforces=xvec(numbars+1:end);
-jointloads=-bvec;
-
+jointloads = -bvec;
 end

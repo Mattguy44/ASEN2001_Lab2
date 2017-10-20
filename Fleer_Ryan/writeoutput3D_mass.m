@@ -15,7 +15,7 @@
 % Modified: Matthew Ryan, Oct. 20, 2017
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function writeoutput3D_mass(outputfile,inputfile,barforces,reacforces,joints,connectivity,reacjoints,reacvecs,rhobar,jointweight,jointloads)
+function writeoutput3D_mass(outputfile,inputfile,barforces,reacforces,joints,connectivity,reacjoints,reacvecs,rhobar,jointweight,jointloads,jointstatus)
 %
 % open output file
 fid=fopen(outputfile,'w');
@@ -28,6 +28,10 @@ fprintf(fid,'Date: %s\n\n',datestr(now));
 % write name of input file
 fprintf(fid,'Input file: %s\n\n',inputfile);
 
+% write properties of materials
+fprintf(fid, 'Linear weight density of members: %3.5f\n', rhobar);
+fprintf(fid, 'Average joint weight: %3.5f\n\n', jointweight);
+
 % write coordinates of joints
 fprintf(fid,'Joints:         Joint-id  x-coord.     y-coord.     z-coord.\n');
 for i=1:size(joints,1)
@@ -38,7 +42,7 @@ fprintf(fid,'\n\n');
 % write loads on joints
 fprintf(fid, 'Joint loads:    Joint-id  Force-x      Force-y      Force-z\n');
 for i = 1:size(joints,1)
-    fprintf(fid, '%17d  %12.3f %12.3f %12.3f\n', i, jointloads(i*3-2), jointloads(i*3-1), jointloads(i*3));
+    fprintf(fid, '%17d  %12.3f %12.3f %12.3f    %s\n', i, jointloads(i*3-2), jointloads(i*3-1), jointloads(i*3), jointstatus(i));
 end
 fprintf(fid,'\n');
     

@@ -10,13 +10,13 @@ function truss3d_mass(inputfile,outputfile)
 % Modified: Matthew Ryan, Oct. 16, 2017
 
 % read input file
-[joints,connectivity,reacjoints,reacvecs,rhobar,jointweight]=readinput_mass(inputfile);
+[joints,connectivity,reacjoints,reacvecs,rhobar,jointweight,maxload]=readinput_mass(inputfile);
 
 % compute forces in bars and reactions
-[barforces,reacforces,jointloads]=forceanalysis3D_mass(joints,connectivity,reacjoints,reacvecs,rhobar,jointweight);
+[barforces,reacforces,jointloads,jointstatus]=forceanalysis3D_mass(joints,connectivity,reacjoints,reacvecs,rhobar,jointweight,maxload);
 
 % write outputfile
-writeoutput3D_mass(outputfile,inputfile,barforces,reacforces,joints,connectivity,reacjoints,reacvecs,rhobar,jointweight,jointloads);
+writeoutput3D_mass(outputfile,inputfile,barforces,reacforces,joints,connectivity,reacjoints,reacvecs,rhobar,jointweight,jointloads,jointstatus);
 
 % plot truss (used in Lab 2)
 %joints3D=zeros(size(joints,1),3);
