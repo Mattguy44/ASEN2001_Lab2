@@ -1,4 +1,4 @@
-function [barforces,reacforces]=forceanalysis3D_mass(joints,connectivity,reacjoints,reacvecs,rhobar,jointweight)
+function [barforces,reacforces,jointloads]=forceanalysis3D_mass(joints,connectivity,reacjoints,reacvecs,rhobar,jointweight)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 % compute forces in bars and reaction forces
@@ -106,5 +106,6 @@ xvec=Amat\bvec;
 % extract forces in bars and reaction forces
 barforces=xvec(1:numbars);
 reacforces=xvec(numbars+1:end);
+jointloads=-bvec;
 
 end

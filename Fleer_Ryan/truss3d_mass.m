@@ -13,10 +13,10 @@ function truss3d_mass(inputfile,outputfile)
 [joints,connectivity,reacjoints,reacvecs,rhobar,jointweight]=readinput_mass(inputfile);
 
 % compute forces in bars and reactions
-[barforces,reacforces]=forceanalysis3D_mass(joints,connectivity,reacjoints,reacvecs,rhobar,jointweight);
+[barforces,reacforces,jointloads]=forceanalysis3D_mass(joints,connectivity,reacjoints,reacvecs,rhobar,jointweight);
 
 % write outputfile
-%writeoutput3D(outputfile,inputfile,barforces,reacforces,joints,connectivity,reacjoints,reacvecs,loadjoints,loadvecs);
+writeoutput3D_mass(outputfile,inputfile,barforces,reacforces,joints,connectivity,reacjoints,reacvecs,rhobar,jointweight,jointloads);
 
 % plot truss (used in Lab 2)
 %joints3D=zeros(size(joints,1),3);
