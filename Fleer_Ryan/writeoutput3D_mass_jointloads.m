@@ -40,9 +40,9 @@ end
 fprintf(fid,'\n\n');
 
 % write loads on joints
-fprintf(fid, 'Weight Distribution:      Joint-id  Weight\n');
+fprintf(fid, 'Joint loads:    Joint-id  Force-x      Force-y      Force-z\n');
 for i = 1:size(joints,1)
-    fprintf(fid, '%27d  %12.3f    %s\n', i, jointloads(i*3), jointstatus(i));
+    fprintf(fid, '%17d  %12.3f %12.3f %12.3f    %s\n', i, jointloads(i*3-2), jointloads(i*3-1), jointloads(i*3), jointstatus(i));
 end
 fprintf(fid,'\n');
     

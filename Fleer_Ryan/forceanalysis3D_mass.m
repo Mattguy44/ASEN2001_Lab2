@@ -22,17 +22,17 @@ numjoints = size(joints,1);
 numbars   = size(connectivity,1);
 numreact  = size(reacjoints,1);
 
-% allocate arrays
-weightvec = zeros(3*numjoints,1);
-%jointfailure = repmat(' ',[numjoints 1]);
-jointfailure = strings(numjoints,1);
-
 % define max design load
-k = 1.7;
-maxdesign = maxload/k;
+maxdesign = 3.2767;
+% k = maxload/maxdesign = 1.4649
 
 % number of equations
 numeqns = 3 * numjoints;
+
+% allocate arrays
+weightvec = zeros(numeqns,1);
+jointfailure = strings(numjoints,1);
+%jointloads = zeros(numeqns,1);
 
 % allocate arrays for linear system
 Amat = zeros(numeqns);
@@ -116,21 +116,50 @@ xvec=Amat\bvec;
 % extract forces in bars and reaction forces
 barforces=xvec(1:numbars);
 reacforces=xvec(numbars+1:end);
-jointloads = -bvec + xvec;
+%jointloads = -bvec + xvec; %incorrect
+jointloads = bvec;
 
-% check if load on joint is too great
 for i=1:numjoints
-    idx = i*3-2;
-    idy = i*3-1;
-    idz = i*3;
-    
-    j_mag = norm([jointloads(idx) jointloads(idy) jointloads(idz)]);
-    if j_mag > maxload
-        jointfailure(i) = string('Exceeds Maximum Load');
-    else
-        if j_mag > maxdesign
-            jointfailure(i) = string('Exceeds Allowable Load');
-        end
-    end
+    % get all bars connected to joint
+   [ibar,~]=find(connectivity==i);
+   
+   % check if loads on joints are too great
+   if max(abs(barforces(ibar))) > maxload
+       jointfailure(i) = string('Exceeds Maximum Load');
+   elseif max(abs(barforces(ibar))) > maxdesign
+       jointfailure(i) = string('Exceeds Allowable Load');
+   end
 end
+% for i=1:numbars
+%     if barforces(i) > maxload
+%         jointfailure(i) = string('Exceeds Maximum Load');
+
+% % check if load on joint is too great
+% for i=1:numjoints
+%     idx = i*3-2;
+%     idy = i*3-1;
+%     idz = i*3;
+%     
+%     j_mag = norm([jointloads(idx) jointloads(idy) jointloads(idz)]);
+%     if j_mag > maxload
+%         jointfailure(i) = string('Exceeds Maximum Load');
+%     else
+%         if j_mag > maxdesign
+%             jointfailure(i) = string('Exceeds Allowable Load');
+%         end
+%     end
+%     
+%     %j_mag = norm([jointloads(idx) jointloads(idy) jointloads(idz)]);
+%     jx = jointloads(idx);
+%     jy = jointloads(idy);
+%     jz = jointloads(idz);
+%     
+%     if jx > maxload || jy > maxload || jz > maxload
+%         jointfailure(i) = string('Exceeds Maximum Load');
+%     else
+%         if jx > maxdesign || jy > maxdesign || jz > maxdesign
+%             jointfailure(i) = string('Exceeds Allowable Load');
+%         end
+%     end
+% end
 end
