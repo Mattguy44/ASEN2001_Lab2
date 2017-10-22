@@ -25,6 +25,7 @@ numreact  = size(reacjoints,1);
 % allocate arrays
 weightvec = zeros(3*numjoints,1);
 %jointfailure = repmat(' ',[numjoints 1]);
+jointfailure = strings(numjoints,1);
 
 % define max design load
 k = 1.7;
@@ -100,16 +101,6 @@ for i=1:numjoints
     % add weight vector into bvec (sign change)
     bvec(idz) = -weightvec(idz) + jointweight;
     
-    % check if load on joint is too great
-    b_mag = norm([bvec(idx) bvec(idy) bvec(idz)]);
-    if b_mag > maxload
-        jointfailure(i) = string('Exceeds Maximum Load');
-    else
-        if b_mag > maxdesign
-            jointfailure(i) = string('Exceeds Allowable Load');
-        end
-    end
-    
 %     % extract loads on joints
 %     jointloads(i) = [bvec(idx) bvec(idy) bvec(idz) jointfailure(i)];
 end
@@ -125,5 +116,21 @@ xvec=Amat\bvec;
 % extract forces in bars and reaction forces
 barforces=xvec(1:numbars);
 reacforces=xvec(numbars+1:end);
-jointloads = -bvec;
+jointloads = -bvec + xvec;
+
+% check if load on joint is too great
+for i=1:numjoints
+    idx = i*3-2;
+    idy = i*3-1;
+    idz = i*3;
+    
+    j_mag = norm([jointloads(idx) jointloads(idy) jointloads(idz)]);
+    if j_mag > maxload
+        jointfailure(i) = string('Exceeds Maximum Load');
+    else
+        if j_mag > maxdesign
+            jointfailure(i) = string('Exceeds Allowable Load');
+        end
+    end
+end
 end
