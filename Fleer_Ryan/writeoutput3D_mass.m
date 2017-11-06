@@ -12,11 +12,11 @@
 %         loadjoints   - joint id where external load acts on
 %         loadvecs     - load vector
 %
+% Author: Kurt Maute, Sept 21 2011
 % Modified: Matthew Ryan, Oct. 20, 2017
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function writeoutput3D_mass(outputfile,inputfile,barforces,reacforces,joints,connectivity,reacjoints,reacvecs,rhobar,jointweight,jointloads,jointstatus)
-%
 % open output file
 fid=fopen(outputfile,'w');
 

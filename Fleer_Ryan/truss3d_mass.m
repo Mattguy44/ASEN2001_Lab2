@@ -18,9 +18,7 @@ function truss3d_mass(inputfile,outputfile)
 % write outputfile
 writeoutput3D_mass(outputfile,inputfile,barforces,reacforces,joints,connectivity,reacjoints,reacvecs,rhobar,jointweight,jointloads,jointstatus);
 
-% plot truss (used in Lab 2)
-%joints3D=zeros(size(joints,1),3);
-%joints3D(:,1:3)=joints;
+% plot truss
 plottruss(joints,connectivity,barforces,reacjoints,3*[0.025,0.04,0.05],[1 1 0 0]);
 
 end

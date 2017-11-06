@@ -11,7 +11,8 @@
 %         loadjoints   - joint id where external load acts on
 %         loadvecs     - load vector
 %
-% Matthew Ryan, Ethan Fleer - 10/16/2017
+% Author: Kurt Maute, Sept 21 2011
+% Modified: Ethan Fleer - 10/16/2017
 % Modified: Matthew Ryan, Oct. 20, 2017
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

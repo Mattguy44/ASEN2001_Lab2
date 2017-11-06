@@ -32,7 +32,6 @@ numeqns = 3 * numjoints;
 % allocate arrays
 weightvec = zeros(numeqns,1);
 jointfailure = strings(numjoints,1);
-%jointloads = zeros(numeqns,1);
 
 % allocate arrays for linear system
 Amat = zeros(numeqns);
@@ -100,9 +99,6 @@ for i=1:numjoints
 
     % add weight vector into bvec (sign change)
     bvec(idz) = -weightvec(idz) + jointweight;
-    
-%     % extract loads on joints
-%     jointloads(i) = [bvec(idx) bvec(idy) bvec(idz) jointfailure(i)];
 end
 
 % check for invertability of Amat
@@ -116,7 +112,6 @@ xvec=Amat\bvec;
 % extract forces in bars and reaction forces
 barforces=xvec(1:numbars);
 reacforces=xvec(numbars+1:end);
-%jointloads = -bvec + xvec; %incorrect
 jointloads = bvec;
 
 for i=1:numjoints
@@ -130,10 +125,9 @@ for i=1:numjoints
        jointfailure(i) = string('Exceeds Allowable Load');
    end
 end
-% for i=1:numbars
-%     if barforces(i) > maxload
-%         jointfailure(i) = string('Exceeds Maximum Load');
 
+% Used for determining critical joints
+% jointloads = -bvec + xvec;
 % % check if load on joint is too great
 % for i=1:numjoints
 %     idx = i*3-2;
@@ -161,5 +155,6 @@ end
 %             jointfailure(i) = string('Exceeds Allowable Load');
 %         end
 %     end
+%     Fs(i) = j_mag;
 % end
 end
